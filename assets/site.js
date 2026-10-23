@@ -233,6 +233,12 @@
       document.getElementById(os === "win" ? "dlWin" : "dlMac").classList.add("suggested");
     }
   }
+  // Counts a download as a GoatCounter event (download-mac / download-win). Only
+  // links that fetch the zip count: on a phone the hero buttons just scroll.
+  document.querySelectorAll("[data-dl]").forEach((a) => a.addEventListener("click", () => {
+    if (!/\.zip$/.test(a.href) || !window.goatcounter || !window.goatcounter.count) return;
+    window.goatcounter.count({ path: "download-" + a.dataset.dl, title: "Download " + a.dataset.dl, event: true });
+  }));
 
   let release = null;
   function showRelease() {
